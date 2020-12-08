@@ -76,6 +76,9 @@ const onPutFunction = async function(req, res) {
 }
 
 app.put('/', (req, res) => {
+    console.log(req)
+    console.log('-------------------')
+    console.log(res)
     onPutFunction(req, res)
 })
 
