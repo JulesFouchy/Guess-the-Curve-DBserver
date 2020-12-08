@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
     })
 })
 
-app.put('/', (req, res) => {
+const onPutFunction = async function(req, res) {
     const client = new MongoClient(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true })
   
     try {
@@ -73,6 +73,10 @@ app.put('/', (req, res) => {
     finally {
         client.close()
     }
+}
+
+app.put('/', (req, res) => {
+    onPutFunction(req, res)
 })
 
 //
