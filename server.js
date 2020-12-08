@@ -30,6 +30,15 @@ const dbRequest = async (req) => {
     }
 }
 
+const addFunction = async (db, value, explanation) => {
+    // Add Function
+    await db.collection('functionsToGuess')
+        .insertOne({
+            value,
+            explanation,
+        })
+}
+
 app.get('/', (req, res) => {
     dbRequest( db => {
         db.collection('functionsToGuess').find({}).toArray( (err, result) => {
@@ -42,6 +51,28 @@ app.get('/', (req, res) => {
             }
         })
     })
+})
+
+app.put('/', (req, res) => {
+    const client = new MongoClient(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true })
+  
+    try {
+        await client.connect();
+        console.log("Connected correctly to server")
+    
+        const db = client.db('Guess-the-Curve')
+    
+        await addFunction(db, 'x', 'ohlala')
+    }
+    catch (err) {
+        console.log('--------------------')
+        console.log('Something went wrong')
+        console.log('--------------------')
+        console.log(err)
+    }
+    finally {
+        client.close()
+    }
 })
 
 //
