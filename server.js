@@ -5,10 +5,16 @@ if (process.env.DEBUG)
     require('dotenv/config')
 
 // Allow CORS
-app.use((req, res, next) => {
-	res.header('Access-Control-Allow-Origin', '*')
-	next()
-})
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    res.header("Access-Control-Allow-Methods", "PUT")
+    next()
+  });
+
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 // DB
 
@@ -62,13 +68,15 @@ const onPutFunction = async function(req, res) {
     
         const db = client.db('Guess-the-Curve')
     
-        await addFunction(db, 'x', 'ohlala')
+        await addFunction(db, req.body.value, req.body.explanation)
+        res.send('success')
     }
     catch (err) {
         console.log('--------------------')
         console.log('Something went wrong')
         console.log('--------------------')
         console.log(err)
+        res.send('error')
     }
     finally {
         client.close()
@@ -76,9 +84,6 @@ const onPutFunction = async function(req, res) {
 }
 
 app.put('/', (req, res) => {
-    console.log(req)
-    console.log('-------------------')
-    console.log(res)
     onPutFunction(req, res)
 })
 
