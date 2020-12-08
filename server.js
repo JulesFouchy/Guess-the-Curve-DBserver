@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
 const serv = require('http').Server(app)
-require('dotenv/config')
+if (process.env.DEBUG)
+    require('dotenv/config')
 
 // Allow CORS
 app.use((req, res, next) => {
